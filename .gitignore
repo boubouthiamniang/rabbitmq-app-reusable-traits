@@ -1,5 +1,6 @@
 # Default ignored files
 /target
+/bin
 
 #IDE
 .idea
