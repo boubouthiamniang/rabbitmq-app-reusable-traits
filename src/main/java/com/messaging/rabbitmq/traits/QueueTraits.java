@@ -5,7 +5,13 @@ import java.util.Map;
 import com.rabbitmq.client.Channel;
 
 public class QueueTraits {
-    //Without argument
+
+    default void declareQueueMinimal(Channel channel) throws Exception {
+        channel.queueDeclare();
+        System.out.println(" [*] Waiting for messages. To exit press CTRL+C");
+    }
+
+    //Without arguments
     default void declareQueue(Channel channel, String queueName) throws Exception {
         channel.queueDeclare(queueName, false, false, false, null);
         System.out.println(" [*] Waiting for messages. To exit press CTRL+C");
@@ -91,5 +97,9 @@ public class QueueTraits {
             .setRedeliveryLimit(redeliveryLimit != null ? redeliveryLimit : 5)
             .setMaxNbPriorities(maxNbPriorities != null ? maxNbPriorities : 10)
             .build();
+    }
+    
+    default void purgeQueue(Channel channel, String queueName) {
+        channel.queuePurge(queueName);
     }
 }
