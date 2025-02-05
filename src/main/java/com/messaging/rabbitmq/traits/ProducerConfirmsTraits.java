@@ -1,18 +1,14 @@
 package com.messaging.rabbitmq.traits;
 
+import java.util.concurrent.ConcurrentNavigableMap;
+import java.util.concurrent.ConcurrentSkipListMap;
+
 import com.messaging.rabbitmq.utils.TimeoutManagement;
 import com.rabbitmq.client.Channel;
+import com.rabbitmq.client.ConfirmCallback;
 
-public interface ProducerTraits {
-
-    default void publish(Channel channel, String exchange, String routingKey, String message) throws Exception {
-        channel.basicPublish(exchange, routingKey, null, message.getBytes());
-    }
-
-    default void publishWithBasicProperties(Channel channel, String exchange, String routingKey, BasicProperties props, String message) throws Exception {
-        channel.basicPublish(exchange, routingKey, props, message.getBytes());
-    }
-
+public class ProducerConfirmsTraits {
+    
     default publishMessagesIndividually(Channel channel, String queueName) throws Exception {
         static final int MESSAGE_COUNT = 50000;
 
@@ -98,5 +94,5 @@ public interface ProducerTraits {
         }
         long end = System.nanoTime();
         System.out.format("Published %,d messages and handled confirms asynchronously in %,d ms%n", MESSAGE_COUNT, Duration.ofNanos(end - start).toMillis());
-    }
+    } 
 }

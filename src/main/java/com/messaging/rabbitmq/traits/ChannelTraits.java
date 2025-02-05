@@ -12,6 +12,11 @@ public interface ChannelTraits {
     default public Channel createChannel(Connection connection) throws Exception {
         return connection.createChannel();
     }
+
+    //Exchange
+    default void declareExchange(String exchangeName, String exchangeType) throws Exception {
+        channel.exchangeDeclare(exchangeName, exchangeType);
+    }
     
     //Without argument
     default void declareQueue(Channel channel, String queueName) throws Exception {
