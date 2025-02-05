@@ -3,7 +3,7 @@ package main.java.com.messaging.rabbitmq.traits;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.DeliverCallback;
 
-public interface MessageConsumer {
+public interface SubscriberTraits {
 
     default DeliverCallback createMessageHandler() {
         return (consumerTag, delivery) -> {

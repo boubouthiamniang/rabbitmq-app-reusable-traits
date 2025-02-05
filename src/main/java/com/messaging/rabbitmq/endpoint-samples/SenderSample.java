@@ -1,13 +1,13 @@
 package com.messaging.rabbitmq.endpoint;
 
-import com.messaging.rabbitmq.traits.ChannelOperations;
-import com.messaging.rabbitmq.traits.Connectable;
-import com.messaging.rabbitmq.traits.MessagePublisher;
-import com.messaging.rabbitmq.traits.Payload;
+import com.messaging.rabbitmq.traits.ChannelTraits;
+import com.messaging.rabbitmq.traits.ConnectionTraits;
+import com.messaging.rabbitmq.traits.MessageTraits;
+import com.messaging.rabbitmq.traits.ProducerTraits;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 
-public class SenderSample implements Connectable, ChannelOperations, MessagePublisher, Payload {
+public class SenderSample implements ConnectionTraits, ChannelTraits, ProducerTraits, MessageTraits {
     private static final String QUEUE_NAME = "hello";
 
     public void sendMessage() {

@@ -1,11 +1,11 @@
 package com.messaging.rabbitmq.endpoint;
 
-import com.messaging.rabbitmq.traits.ChannelOperations;
-import com.messaging.rabbitmq.traits.Connectable;
+import com.messaging.rabbitmq.traits.ChannelTraits;
+import com.messaging.rabbitmq.traits.ConnectionTraits;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 
-public class ReceiverSample implements Connectable, ChannelOperations {
+public class ReceiverSample implements ConnectionTraits, ChannelTraits {
     private static final String QUEUE_NAME = "basic_queue";
 
     // Method to start listening for messages

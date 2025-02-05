@@ -7,12 +7,13 @@ import com.rabbitmq.client.Connection;
 import java.util.HashMap;
 import java.util.Map;
 
-public interface ChannelOperations {
+public interface ChannelTraits {
 
     default public Channel createChannel(Connection connection) throws Exception {
         return connection.createChannel();
     }
     
+    //Without argument
     default void declareQueue(Channel channel, String queueName) throws Exception {
         channel.queueDeclare(queueName, false, false, false, null);
         System.out.println(" [*] Waiting for messages. To exit press CTRL+C");
@@ -48,7 +49,7 @@ public interface ChannelOperations {
         System.out.println(" [*] Waiting for messages. To exit press CTRL+C");
     }
     
-    //With argument
+    //With arguments
     default void declareQueue(Channel channel, String queueName, Map<String, Object> queueArgs) throws Exception {
         channel.queueDeclare(queueName, false, false, false, queueArgs);
         System.out.println(" [*] Waiting for messages. To exit press CTRL+C");
