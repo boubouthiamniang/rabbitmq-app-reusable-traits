@@ -1,0 +1,6 @@
+# Default ignored files
+/target
+
+#IDE
+.idea
+.vscode
