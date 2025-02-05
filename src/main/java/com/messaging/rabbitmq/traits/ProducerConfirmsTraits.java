@@ -8,7 +8,8 @@ import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.ConfirmCallback;
 
 public class ProducerConfirmsTraits {
-    
+
+    //BNG - Improve reuse declareQueue variant parameter
     default publishMessagesIndividually(Channel channel, String queueName) throws Exception {
         static final int MESSAGE_COUNT = 50000;
 
