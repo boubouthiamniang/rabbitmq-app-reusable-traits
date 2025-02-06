@@ -3,13 +3,12 @@ package com.messaging.rabbitmq.traits;
 import java.util.concurrent.ConcurrentNavigableMap;
 import java.util.concurrent.ConcurrentSkipListMap;
 
+import com.messaging.rabbitmq.utils.Constants;
 import com.messaging.rabbitmq.utils.TimeoutManagement;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.ConfirmCallback;
 
 public interface ProducerConfirmsTraits {
-
-    static final int MESSAGE_COUNT = 50000;
 
     //BNG - Improve reuse declareQueue variant parameter
     default void publishMessagesIndividually(Channel channel, String queueName) throws Exception {
@@ -18,13 +17,13 @@ public interface ProducerConfirmsTraits {
 
         channel.confirmSelect();
         long start = System.nanoTime();
-        for (int i = 0; i < MESSAGE_COUNT; i++) {
+        for (int i = 0; i < Constants.MESSAGE_COUNT; i++) {
             String body = String.valueOf(i);
-            ch.basicPublish("", queueName, null, body.getBytes());
-            ch.waitForConfirmsOrDie(5000);
+            channel.basicPublish("", queueName, null, body.getBytes());
+            channel.waitForConfirmsOrDie(Constants.PUBLISH_CONFIRM_TIMEOUT);
         }
         long end = System.nanoTime();
-        System.out.format("Published %,d messages individually in %,d ms%n", MESSAGE_COUNT, Duration.ofNanos(end - start).toMillis());
+        System.out.format("Published %,d messages individually in %,d ms%n", Constants.MESSAGE_COUNT, Duration.ofNanos(end - start).toMillis());
     }
 
     default void publishMessagesInBatch(Channel channel, String queueName) throws Exception {
@@ -36,7 +35,7 @@ public interface ProducerConfirmsTraits {
         int outstandingMessageCount = 0;
 
         long start = System.nanoTime();
-        for (int i = 0; i < MESSAGE_COUNT; i++) {
+        for (int i = 0; i < Constants.MESSAGE_COUNT; i++) {
             String body = String.valueOf(i);
             channel.basicPublish("", queueName, null, body.getBytes());
             outstandingMessageCount++;
@@ -51,7 +50,7 @@ public interface ProducerConfirmsTraits {
             channel.waitForConfirmsOrDie(5_000);
         }
         long end = System.nanoTime();
-        System.out.format("Published %,d messages in batch in %,d ms%n", MESSAGE_COUNT, Duration.ofNanos(end - start).toMillis());
+        System.out.format("Published %,d messages in batch in %,d ms%n", Constants.MESSAGE_COUNT, Duration.ofNanos(end - start).toMillis());
     }
 
     //Background
@@ -84,7 +83,7 @@ public interface ProducerConfirmsTraits {
         });
 
         long start = System.nanoTime();
-        for (int i = 0; i < MESSAGE_COUNT; i++) {
+        for (int i = 0; i < Constants.MESSAGE_COUNT; i++) {
             String body = String.valueOf(i);
             outstandingConfirms.put(channel.getNextPublishSeqNo(), body);
             channel.basicPublish("", queueName, null, body.getBytes());
@@ -94,6 +93,6 @@ public interface ProducerConfirmsTraits {
             throw new IllegalStateException("All messages could not be confirmed in 60 seconds");
         }
         long end = System.nanoTime();
-        System.out.format("Published %,d messages and handled confirms asynchronously in %,d ms%n", MESSAGE_COUNT, Duration.ofNanos(end - start).toMillis());
+        System.out.format("Published %,d messages and handled confirms asynchronously in %,d ms%n", Constants.MESSAGE_COUNT, Duration.ofNanos(end - start).toMillis());
     } 
 }
