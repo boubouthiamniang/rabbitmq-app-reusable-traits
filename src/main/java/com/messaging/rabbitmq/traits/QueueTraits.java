@@ -4,7 +4,7 @@ import java.util.Map;
 
 import com.rabbitmq.client.Channel;
 
-public class QueueTraits {
+public interface QueueTraits {
 
     default void declareQueueMinimal(Channel channel) throws Exception {
         channel.queueDeclare();
