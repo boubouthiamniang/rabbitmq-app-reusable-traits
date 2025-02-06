@@ -9,9 +9,10 @@ import com.rabbitmq.client.ConfirmCallback;
 
 public interface ProducerConfirmsTraits {
 
+    static final int MESSAGE_COUNT = 50000;
+
     //BNG - Improve reuse declareQueue variant parameter
-    default publishMessagesIndividually(Channel channel, String queueName) throws Exception {
-        static final int MESSAGE_COUNT = 50000;
+    default void publishMessagesIndividually(Channel channel, String queueName) throws Exception {
 
         channel.queueDeclare(queueName, false, false, true, null);
 
@@ -26,9 +27,7 @@ public interface ProducerConfirmsTraits {
         System.out.format("Published %,d messages individually in %,d ms%n", MESSAGE_COUNT, Duration.ofNanos(end - start).toMillis());
     }
 
-    default publishMessagesInBatch(Channel channel, String queueName) throws Exception {
-
-        static final int MESSAGE_COUNT = 50000;
+    default void publishMessagesInBatch(Channel channel, String queueName) throws Exception {
 
         channel.queueDeclare(queueName, false, false, true, null);
         channel.confirmSelect();
@@ -57,7 +56,6 @@ public interface ProducerConfirmsTraits {
 
     //Background
     static void handlePublishConfirmsAsynchronously(Channel channel, String queueName) throws Exception {
-        static final int MESSAGE_COUNT = 50000;
 
         channel.queueDeclare(queueName, false, false, true, null);
 
@@ -89,7 +87,7 @@ public interface ProducerConfirmsTraits {
         for (int i = 0; i < MESSAGE_COUNT; i++) {
             String body = String.valueOf(i);
             outstandingConfirms.put(channel.getNextPublishSeqNo(), body);
-            channel.basicPublish("", queue, null, body.getBytes());
+            channel.basicPublish("", queueName, null, body.getBytes());
         }
 
         if (!TimeoutManagement.waitUntil(Duration.ofSeconds(60), () -> outstandingConfirms.isEmpty())) {

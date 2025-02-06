@@ -12,22 +12,22 @@ import java.util.Map;
 public interface ChannelTraits {
 
     default public Channel createChannel(Connection connection) throws Exception {
-        return connection..createChannel();
+        return connection.createChannel();
     }  
 
     default void channelBasicQos(Channel channel, int prefetchCount) {
         channel.basicQos(prefetchCount);
     }
 
-    default void channelBasicAck(Channel channel, DeliverCallback delivery) {
-        channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
+    default void channelBasicAck(Channel channel, long deliveryTag, boolean multiple) {
+        channel.basicAck(deliveryTag, multiple)
     }
 
     default void channelBasicNack(Channel channel, long deliveryTag, boolean multiple, boolean requeue) {
         channel.basicNack(deliveryTag, multiple, requeue);  
     }
 
-    default void channelBasicReject(Channel channel, long deliveryTag, boolean requeue) throws IOException;{
+    default void channelBasicReject(Channel channel, long deliveryTag, boolean requeue) throws IOException {
         channel.basicReject(deliveryTag, requeue);   
     }
 

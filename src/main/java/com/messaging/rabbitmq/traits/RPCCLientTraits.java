@@ -7,11 +7,10 @@ import java.util.concurrent.ExecutionException;
 
 import com.rabbitmq.client.AMQP;
 
-public class RPCCLientTraits {
+public interface RPCCLientTraits {
 
     default String call(Channel channel, String message, String requestQueueName, String replyQueueName) throws IOException, InterruptedException, ExecutionException {
         final String corrId = UUID.randomUUID().toString();
-        String replyQueueName = channel.queueDeclare().getQueue();
 
         AMQP.BasicProperties props = new AMQP.BasicProperties
                 .Builder()

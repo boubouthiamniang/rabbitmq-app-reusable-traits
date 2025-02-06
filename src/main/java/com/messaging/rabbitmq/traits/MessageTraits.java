@@ -8,6 +8,10 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Map;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.xml.XmlMapper;
+import com.rabbitmq.client.BasicProperties;
+
 public interface MessageTraits {
 
     /** Convert plain text to UTF-8 byte array **/

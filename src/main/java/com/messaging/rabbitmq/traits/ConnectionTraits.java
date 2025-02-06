@@ -8,14 +8,14 @@ import java.io.IOException;
 
 public interface ConnectionTraits {
     default public Connection createConnection(String host, int port, String username, String password) throws Exception {
-        try(ConnectionFactory factory = new ConnectionFactory();) {
+        try(ConnectionFactory factory = new ConnectionFactory()) {
             factory.setHost(host);
             factory.setPort(port);
             factory.setUsername(username);
             factory.setPassword(password);
             return factory.newConnection();
         } catch (Exception e) {
-            System.out.println("Error", e);
+            e.printStackTrace();
         }
     }
 
