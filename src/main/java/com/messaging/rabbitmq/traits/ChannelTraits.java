@@ -20,7 +20,7 @@ public interface ChannelTraits {
     }
 
     default void channelBasicAck(Channel channel, long deliveryTag, boolean multiple) {
-        channel.basicAck(deliveryTag, multiple)
+        channel.basicAck(deliveryTag, multiple);
     }
 
     default void channelBasicNack(Channel channel, long deliveryTag, boolean multiple, boolean requeue) {

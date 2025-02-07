@@ -16,6 +16,7 @@ public interface ConnectionTraits {
             return factory.newConnection();
         } catch (Exception e) {
             e.printStackTrace();
+            return null;
         }
     }
 
