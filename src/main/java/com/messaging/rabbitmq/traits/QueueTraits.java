@@ -13,77 +13,9 @@ public interface QueueTraits {
         System.out.println(" [*] Waiting for messages. To exit press CTRL+C");
     }
  
-    //Without arguments
-    default void declareQueue(Channel channel, String queueName) throws Exception {
-        channel.queueDeclare(queueName, false, false, false, null);
-        System.out.println(" [*] Waiting for messages. To exit press CTRL+C");
+    default void declareQueue(Channel channel, String queueName, boolean isDurable, boolean isExclusive, boolean isAutoDelete, Map<String, Object> queueArguments) throws Exception {
+        channel.queueDeclare(queueName, isDurable, isExclusive, isAutoDelete, queueArguments);
     } 
-
-    default void declareQueueDurable(Channel channel, String queueName) throws Exception {
-        channel.queueDeclare(queueName, true, false, false, null);
-        System.out.println(" [*] Waiting for messages. To exit press CTRL+C");
-    } 
-
-    default void declareQueueExclusive(Channel channel, String queueName) throws Exception {
-        channel.queueDeclare(queueName, false, true, false, null);
-        System.out.println(" [*] Waiting for messages. To exit press CTRL+C");
-    } 
-
-    default void declareQueueAutoDelete(Channel channel, String queueName) throws Exception {
-        channel.queueDeclare(queueName, false, false, true, null);
-        System.out.println(" [*] Waiting for messages. To exit press CTRL+C");
-    }
-
-    default void declareQueueDurableExclusive(Channel channel, String queueName) throws Exception {
-        channel.queueDeclare(queueName, true, true, false, null);
-        System.out.println(" [*] Waiting for messages. To exit press CTRL+C");
-    }
-
-    default void declareQueueDurableAutoDelete(Channel channel, String queueName) throws Exception {
-        channel.queueDeclare(queueName, true, false, true, null);
-        System.out.println(" [*] Waiting for messages. To exit press CTRL+C");
-    }
-
-    default void declareQueueDurableExclusiveAutoDelete(Channel channel, String queueName) throws Exception {
-        channel.queueDeclare(queueName, true, true, true, null);
-        System.out.println(" [*] Waiting for messages. To exit press CTRL+C");
-    }
-    
-    //With arguments
-    default void declareQueue(Channel channel, String queueName, Map<String, Object> queueArgs) throws Exception {
-        channel.queueDeclare(queueName, false, false, false, queueArgs);
-        System.out.println(" [*] Waiting for messages. To exit press CTRL+C");
-    } 
-
-    default void declareQueueDurable(Channel channel, String queueName, Map<String, Object> queueArgs) throws Exception {
-        channel.queueDeclare(queueName, true, false, false, queueArgs);
-        System.out.println(" [*] Waiting for messages. To exit press CTRL+C");
-    } 
-
-    default void declareQueueExclusive(Channel channel, String queueName, Map<String, Object> queueArgs) throws Exception {
-        channel.queueDeclare(queueName, false, true, false, queueArgs);
-        System.out.println(" [*] Waiting for messages. To exit press CTRL+C");
-    } 
-
-    default void declareQueueAutoDelete(Channel channel, String queueName, Map<String, Object> queueArgs) throws Exception {
-        channel.queueDeclare(queueName, false, false, true, queueArgs);
-        System.out.println(" [*] Waiting for messages. To exit press CTRL+C");
-    }
-
-    default void declareQueueDurableExclusive(Channel channel, String queueName, Map<String, Object> queueArgs) throws Exception {
-        channel.queueDeclare(queueName, true, true, false, queueArgs);
-        System.out.println(" [*] Waiting for messages. To exit press CTRL+C");
-    }
-
-    default void declareQueueDurableAutoDelete(Channel channel, String queueName, Map<String, Object> queueArgs) throws Exception {
-        channel.queueDeclare(queueName, true, false, true, queueArgs);
-        System.out.println(" [*] Waiting for messages. To exit press CTRL+C");
-    }
-
-    default void declareQueueDurableExclusiveAutoDelete(Channel channel, String queueName, Map<String, Object> queueArgs) throws Exception {
-        channel.queueDeclare(queueName, true, true, true, queueArgs);
-        System.out.println(" [*] Waiting for messages. To exit press CTRL+C");
-    }
 
     default Map<String, Object> createQueueArguments(
         String type,

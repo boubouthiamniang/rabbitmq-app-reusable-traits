@@ -12,7 +12,7 @@ public interface RPCServerTraits {
             String message = new String(body, "UTF-8");
 
             // Process the message (this should be a custom method)
-            response = call(message);
+            response = processRequest(message);
 
         } catch (Exception e) {
             System.out.println(" [.] Error: " + e.getMessage());
@@ -28,10 +28,8 @@ public interface RPCServerTraits {
         }
     }
 
-    
-    // Method to process the message
-    default String call(String message) {
-        // Implement your custom processing logic here
+    // A simple function to simulate processing
+    private static String processRequest(String message) {
         return "Processed: " + message;
     }
 }
