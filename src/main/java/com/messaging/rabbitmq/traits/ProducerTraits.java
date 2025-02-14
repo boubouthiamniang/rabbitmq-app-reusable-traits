@@ -1,8 +1,7 @@
 package com.messaging.rabbitmq.traits;
 
-import com.messaging.rabbitmq.utils.Constants;
-import com.messaging.rabbitmq.utils.TimeoutManagement;
 import com.rabbitmq.client.Channel;
+import com.rabbitmq.client.AMQP.BasicProperties;
 
 public interface ProducerTraits {
 

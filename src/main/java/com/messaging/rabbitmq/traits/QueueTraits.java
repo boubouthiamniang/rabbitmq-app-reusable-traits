@@ -1,7 +1,9 @@
 package com.messaging.rabbitmq.traits;
 
+import java.io.IOException;
 import java.util.Map;
 
+import com.messaging.rabbitmq.utils.QueueArgumentsBuilder;
 import com.rabbitmq.client.Channel;
 
 public interface QueueTraits {
@@ -10,7 +12,7 @@ public interface QueueTraits {
         channel.queueDeclare();
         System.out.println(" [*] Waiting for messages. To exit press CTRL+C");
     }
-
+ 
     //Without arguments
     default void declareQueue(Channel channel, String queueName) throws Exception {
         channel.queueDeclare(queueName, false, false, false, null);
@@ -98,8 +100,9 @@ public interface QueueTraits {
             .setMaxNbPriorities(maxNbPriorities != null ? maxNbPriorities : 10)
             .build();
     }
+
     
-    default void purgeQueue(Channel channel, String queueName) {
+    default void purgeQueue(Channel channel, String queueName) throws IOException {
         channel.queuePurge(queueName);
     }
 }

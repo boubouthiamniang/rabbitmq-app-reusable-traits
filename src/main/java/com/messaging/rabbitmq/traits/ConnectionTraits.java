@@ -6,21 +6,15 @@ import com.rabbitmq.client.ConnectionFactory;
 
 import java.io.IOException;
 
-public interface ConnectionTraits {
-    default public Connection createConnection(String host, int port, String username, String password) throws Exception {
-        try(ConnectionFactory factory = new ConnectionFactory()) {
-            factory.setHost(host);
-            factory.setPort(port);
-            factory.setUsername(username);
-            factory.setPassword(password);
-            return factory.newConnection();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
+public interface ConnectionTraits{
+
+    default Connection createConnection(String host) throws Exception {
+        ConnectionFactory factory = new ConnectionFactory();
+        factory.setHost(host);
+        return factory.newConnection();
     }
 
-    default public Connection createConnectionWithPortAndCredential(String host, int port, String username, String password) throws Exception {
+    default Connection createConnectionWithPortAndCredential(String host, int port, String username, String password) throws Exception {
         ConnectionFactory factory = new ConnectionFactory();
         factory.setHost(host);
         factory.setPort(port);

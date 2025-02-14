@@ -3,27 +3,24 @@ package com.messaging.rabbitmq.traits;
 
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
-import com.rabbitmq.client.DeliverCallback;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 public interface ChannelTraits {
 
-    default public Channel createChannel(Connection connection) throws Exception {
+    default Channel createChannel(Connection connection) throws Exception {
         return connection.createChannel();
     }  
 
-    default void channelBasicQos(Channel channel, int prefetchCount) {
+    default void channelBasicQos(Channel channel, int prefetchCount) throws IOException {
         channel.basicQos(prefetchCount);
     }
 
-    default void channelBasicAck(Channel channel, long deliveryTag, boolean multiple) {
+    default void channelBasicAck(Channel channel, long deliveryTag, boolean multiple) throws IOException {
         channel.basicAck(deliveryTag, multiple);
     }
 
-    default void channelBasicNack(Channel channel, long deliveryTag, boolean multiple, boolean requeue) {
+    default void channelBasicNack(Channel channel, long deliveryTag, boolean multiple, boolean requeue) throws IOException {
         channel.basicNack(deliveryTag, multiple, requeue);  
     }
 
@@ -38,4 +35,9 @@ public interface ChannelTraits {
     default void channelQueueBind(Channel channel, String queueName, String exchangeName, String routingKey) throws IOException {
         channel.queueBind(queueName, exchangeName, routingKey);  
     } 
+
+    default void channelConfirmSelect(Channel channel) throws IOException {
+        channel.confirmSelect();
+    }
+    
 }

@@ -1,5 +1,6 @@
 package com.messaging.rabbitmq.utils;
 
+import java.time.Duration;
 import java.util.function.BooleanSupplier;
 
 public class TimeoutManagement {

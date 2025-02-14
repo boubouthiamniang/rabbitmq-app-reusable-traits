@@ -1,29 +1,37 @@
 package com.messaging.rabbitmq.traits;
 
-import com.messaging.rabbitmq.traits.MessageProcessor.MessageProcessor;
-import com.rabbitmq.client.AMQP;
+import com.rabbitmq.client.Channel;
+import com.rabbitmq.client.AMQP.BasicProperties;
 
 public interface RPCServerTraits {
 
-    default void handleMessage(Channel channel, String queueName, String correlationId, byte[] body, MessageProcessor processor) throws Exception {
+    // Handle incoming request
+    public default void handleMessage(Channel channel, String queueName, String correlationId, byte[] body) throws Exception {
         String response = "";
         try {
             String message = new String(body, "UTF-8");
 
-            // Use the custom processor to handle the message
-            response = processor.processMessage(message);
+            // Process the message (this should be a custom method)
+            response = call(message);
 
         } catch (Exception e) {
             System.out.println(" [.] Error: " + e.getMessage());
+            response = "Error processing message";
         } finally {
-            // Send the response back to the reply queue (if any)
-            AMQP.BasicProperties replyProps = new AMQP.BasicProperties
-                    .Builder()
-                    .correlationId(correlationId) // Maintain the correlation ID for response matching
+            // Send the response back to the reply queue with correlation ID
+            BasicProperties replyProps = new BasicProperties.Builder()
+                    .correlationId(correlationId) // Maintain correlation ID for matching the response
                     .build();
 
             // Publish the response to the reply queue
             channel.basicPublish("", queueName, replyProps, response.getBytes("UTF-8"));
         }
+    }
+
+    
+    // Method to process the message
+    default String call(String message) {
+        // Implement your custom processing logic here
+        return "Processed: " + message;
     }
 }

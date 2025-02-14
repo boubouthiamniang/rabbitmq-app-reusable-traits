@@ -6,6 +6,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
 import com.rabbitmq.client.AMQP;
+import com.rabbitmq.client.Channel;
 
 public interface RPCCLientTraits {
 

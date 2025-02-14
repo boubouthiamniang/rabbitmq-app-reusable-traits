@@ -5,12 +5,19 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.util.Date;
 import java.util.Map;
+
+import org.apache.avro.io.DatumWriter;
+import org.apache.avro.io.Encoder;
+import org.apache.avro.io.EncoderFactory;
+import org.apache.avro.specific.SpecificDatumWriter;
+import org.apache.avro.specific.SpecificRecord;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.xml.XmlMapper;
-import com.rabbitmq.client.BasicProperties;
+import com.google.protobuf.Message;
+import com.rabbitmq.client.AMQP;
 
 public interface MessageTraits {
 
@@ -45,14 +52,18 @@ public interface MessageTraits {
     /** Convert an Avro object to byte array (binary format, no encoding needed) **/
     default <T extends SpecificRecord> byte[] getBytesFromAvro(T avroObj) throws Exception {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        
+        // Use SpecificDatumWriter instead of DatumWriter
         DatumWriter<T> writer = new SpecificDatumWriter<>(avroObj.getSchema());
+        
         Encoder encoder = EncoderFactory.get().binaryEncoder(outputStream, null);
         writer.write(avroObj, encoder);
         encoder.flush();
+        
         return outputStream.toByteArray();
     }
 
-    public static BasicProperties createMessageProperties(
+    public static AMQP.BasicProperties createMessageProperties(
         String contentType,
         String contentEncoding,
         Map<String, Object> headers,
@@ -67,22 +78,24 @@ public interface MessageTraits {
         String userId,
         String appId,
         String clusterId) {
-        
-        return new BasicProperties.Builder()
-            .contentType(contentType != null ? contentType : "text/plain")
-            .contentEncoding(contentEncoding)
-            .headers(headers)
-            .deliveryMode(deliveryMode != null ? deliveryMode : 1)
-            .priority(priority != null ? priority : 0)
-            .correlationId(correlationId)
-            .replyTo(replyTo)
-            .expiration(expiration)
-            .messageId(messageId)
-            .timestamp(timestamp)
-            .type(type)
-            .userId(userId)
-            .appId(appId)
-            .clusterId(clusterId)
-            .build();
+
+        AMQP.BasicProperties.Builder builder = new AMQP.BasicProperties.Builder();
+
+        if (contentType != null) builder.contentType(contentType);
+        if (contentEncoding != null) builder.contentEncoding(contentEncoding);
+        if (headers != null) builder.headers(headers);
+        if (deliveryMode != null) builder.deliveryMode(deliveryMode);
+        if (priority != null) builder.priority(priority);
+        if (correlationId != null) builder.correlationId(correlationId);
+        if (replyTo != null) builder.replyTo(replyTo);
+        if (expiration != null) builder.expiration(expiration);
+        if (messageId != null) builder.messageId(messageId);
+        if (timestamp != null) builder.timestamp(timestamp);
+        if (type != null) builder.type(type);
+        if (userId != null) builder.userId(userId);
+        if (appId != null) builder.appId(appId);
+        if (clusterId != null) builder.clusterId(clusterId);
+
+        return builder.build();
     }
 }
