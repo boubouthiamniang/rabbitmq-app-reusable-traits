@@ -29,7 +29,7 @@ public interface RPCServerTraits {
     }
 
     // A simple function to simulate processing
-    private static String processRequest(String message) {
+    public default String processRequest(String message) {
         return "Processed: " + message;
     }
 }
