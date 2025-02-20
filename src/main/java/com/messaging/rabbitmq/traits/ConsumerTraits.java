@@ -4,7 +4,6 @@ import java.io.IOException;
 
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.DeliverCallback;
-import com.rabbitmq.client.Delivery;
 
 public interface ConsumerTraits {
 
